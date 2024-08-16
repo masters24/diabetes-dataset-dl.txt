@@ -1,1508 +1,453 @@
-Aim: A simple client class that generates the private and public keys by using the built-in Python RSA algorithm and test it. 
- On cmd run following 
- 	pip3 install Crypto 
- 	pip3 install pycryptodome 
-Code:  import hashlib 
-	import random 
-	import binascii 
-	import datetime
-	import collections 
-	from Crypto.PublicKey import RSA 
-	from Crypto import Random 
-	from Crypto.Cipher import PKCS1_v1_5 
- 		class Client: 
-	def  init (self): 
-	random = Random.new().read 
-	self._private_key = RSA.generate(1024, random) 
-	self._public_key = self._private_key.publickey() 
-	self._signer = PKCS1_v1_5.new(self._private_key) 
-	@property 
-	def identity(self): 
-	return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii') 
- 		Dinesh = Client() 
-	print ("sender ",Dinesh.identity) 
-Output: 
-1B) Create multiple transactions and display them 
-Code:   import hashlib 
-	import binascii 
-	import datetime 
-	import collections 
-	from Crypto.PublicKey import RSA 
-	from Crypto import Random 
-	from Crypto.Cipher import PKCS1_v1_5 
-	from collections import OrderedDict 
-	import Crypto import Crypto.Random 
-	from Crypto.Hash import SHA 
-	from Crypto.Signature import PKCS1_v1_5 
-	class Client: 
-	def  init (self): 
-	random = Random.new().read 
-	self._private_key = RSA.generate(1024, random) 
-	self._public_key = self._private_key.publickey()
-	self._signer = PKCS1_v1_5.new(self._private_key) 
-	@property 
-	def identity(self): 
-	return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii') 
-	class Transaction: 
-	def  init (self, sender, recipient, value): 
-	self.sender = sender self.recipient = recipient self.value = value 
-	self.time = datetime.datetime.now() 
-	def to_dict(self): 
-	if self.sender == "Genesis": 
-	identity = "Genesis" 
-	else: 
-	identity = self.sender.identity 
-	return collections.OrderedDict({ 
-	'sender': identity, 
-	'recipient': self.recipient, 
-	'value': self.value, 
-	'time' : self.time}) 
-	def sign_transaction(self): 
-	private_key = self.sender._private_key 
-	signer = PKCS1_v1_5.new(private_key) 
-	h = SHA.new(str(self.to_dict()).encode('utf8')) 
-	return binascii.hexlify(signer.sign(h)).decode('ascii') 
-	def display_transaction(transaction): 
-	#for transaction in transactions: 
-	dict = transaction.to_dict() 
-	print ("sender: " + dict['sender']) print (' ---- ') print ("recipient: " + dict['recipient']) print (' ---- ') 
-	print ("value: " + str(dict['value'])) print (' ---- ') print ("time: " + str(dict['time'])) print (' ---- ') 
-	transactions = [] 
-	A = Client()
-	B = Client() 
-	t1 = Transaction( A, B.identity,15.0 ) 
-	t1.sign_transaction() 
-	display_transaction (t1) 
-Output: 
-1C) Create a transaction class to send and receive money and test it. 
-Code: import hashlib 
-	import binascii 
-	import datetime 
-	import collections 
-	from Crypto.PublicKey import RSA 
-	from Crypto import Random 
-	from Crypto.Cipher import PKCS1_v1_5 
-	from collections import OrderedDict 
-	import Crypto 
-	import Crypto.Random 
-	from Crypto.Hash import SHA 
-	from Crypto.Signature import PKCS1_v1_5 
-	class Client: 
-	def init (self): 
-	random = Random.new().read 
-	self._private_key = RSA.generate(1024, random) 
-	self._public_key = self._private_key.publickey() 
-	self._signer = PKCS1_v1_5.new(self._private_key) 
-	@property 
-	def identity(self): 
-	return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii') 
-	class Transaction: 
-	def init (self, sender, recipient, value): 
-	self.sender = sender 
-	self.recipient = recipient 
-	self.value = value 
-	self.time = datetime.datetime.now() 
-	def to_dict(self): 
-	if self.sender == "Genesis": 
-	identity = "Genesis" 
-	else: 
-	identity = self.sender.identity 
-	return collections.OrderedDict({ 'sender': identity, 'recipient': self.recipient,
-	'value': self.value, 'time' : self.time}) 
-	def sign_transaction(self): 
-	private_key = self.sender._private_key 
-	signer = PKCS1_v1_5.new(private_key) 
-	h = SHA.new(str(self.to_dict()).encode('utf8')) 
-	return binascii.hexlify(signer.sign(h)).decode('ascii') 
-	def display_transaction(transaction):
-	 #for transaction in transactions: 
-	dict = transaction.to_dict() 
-	print ("sender: " + dict['sender']) print ('---- ') print ("recipient: " + dict['recipient']) print ('---- ') 
-	print ("value: " + str(dict['value'])) print ('---- ') 
-	print ("time: " + str(dict['time'])) print ('---- ') 
-	transactions = [] 
-	Dinesh = Client() 
-	Ramesh = Client() 
-	Suresh = Client() 
-	t1 = Transaction( Dinesh, Ramesh.identity, 15.0 ) 
-	t1.sign_transaction() 
-	transactions.append(t1) 
-	t2 = Transaction( Ramesh, Suresh.identity, 25.0 ) 
-	t2.sign_transaction() 
-	transactions.append(t2) 
-	t3 = Transaction( Ramesh, Suresh.identity, 200.0 ) 
-	t3.sign_transaction() 
-	transactions.append(t3) 
-	tn=1 for t in transactions: 
-	print("Transaction #",tn) 
-	display_transaction (t) 
-	tn=tn+1 
-	print (' ')
+Aim: Install NLTK and perform Text-to-speech and Speech-to-text.  
+1a) Install NLTK. 
+Install Required Packages: 
+• pip install nltk 
+• pip install gtts
+1b) Convert the given text to speech
+code: from gtts import gTTS
+    from playsound import playsound
+    mytext = "Welcome to SM shetty College"
+    language = "en"
+    myobj = gTTS(text=mytext, lang=language, slow=False)
+    myobj.save("save to dektop/myfile1.mp3")
+    playsound("save to dektop/myfile1.mp3")
+Output: →check the audio file in folder
+1c) Convert audio file speech to text
+To be executed in command prompt -
+    →pip install SpeechRecognition
+    Required file to be downloaded- https://drive.google.com/file/d/1aKzT0WDcXr5tyh19vBNjDI7Aj4S76TGK/view?usp=drive_link
+Code
+    import speech_recognition as sr
+    filename = "audio.wav"
+    r = sr.Recognizer()
+    with sr.AudioFile(filename) as source:
+    audio_data = r.record(source)
+    text = r.recognize_google(audio_data)
+    print(text)
 Output:
-1D) Create a blockchain, a genesis block and execute it.
-Code: import hashlib
-import binascii
-import datetime
-import collections
-from Crypto.PublicKey import RSA
-from Crypto import Random
-from Crypto.Cipher import PKCS1_v1_5
-from collections import OrderedDict
-import Crypto
-import Crypto.Random
-from Crypto.Hash import SHA
-from Crypto.Signature import PKCS1_v1_5
-class Client:
-def init (self):
-random = Random.new().read
-self._private_key = RSA.generate(1024, random)
-self._public_key = self._private_key.publickey()
-self._signer = PKCS1_v1_5.new(self._private_key)
-@property
-def identity(self):
-return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii')
-class Transaction:
-def init (self, sender, recipient, value):
-self.sender = sender
-self.recipient = recipient
-self.value = value
-self.time = datetime.datetime.now()
-def to_dict(self):
-if self.sender == "Genesis":
-identity = "Genesis"
-else:
-identity = self.sender.identity
-return collections.OrderedDict({
-'sender': identity,
-'recipient': self.recipient,
-'value': self.value,
-'time' : self.time})
-def sign_transaction(self):
-private_key = self.sender._private_key
-signer = PKCS1_v1_5.new(private_key)
-h = SHA.new(str(self.to_dict()).encode('utf8'))
-return binascii.hexlify(signer.sign(h)).decode('ascii')
-def display_transaction(transaction):
-#for transaction in transactions:
-dict = transaction.to_dict()
-print ("sender: " + dict['sender']) 
-print ("recipient: " + dict['recipient']) 
-print ("value: " + str(dict['value'])) 
-print ("time: " + str(dict['time']))
-def dump_blockchain (self):
-print ("Number of blocks in the chain: " + str(len (self)))
-for x in range (len(TPCoins)):
-block_temp = TPCoins[x]
-print ("block # " + str(x))
-for transaction in block_temp.verified_transactions:
-display_transaction (transaction)
-print (' ')
-class Block:
-def init (self):
-self.verified_transactions = []
-self.previous_block_hash = ""
-self.Nonce = ""
-Dinesh = Client()
-t0 = Transaction ("Genesis", Dinesh.identity,500.0)
-block0 = Block()
-block0.previous_block_hash = None
-Nonce = None
-block0.verified_transactions.append (t0)
-digest = hash (block0)
-last_block_hash = digest
-TPCoins = []
-TPCoins.append (block0)
-dump_blockchain(TPCoins)
+2a) Study of various Corpus: Brown, Inaugural, udhr with various methods like fields, raw, words, sents, categories. 
+To be executed in command prompt -
+	nltk.download('brown')
+	nltk.download('inaugural')
+	nltk.download('udhr')
+Code:
+	import nltk
+	nltk.download('brown')
+	nltk.download('inaugural')
+	nltk.download('udhr')
+	from nltk.corpus import brown
+	print("Brown Corpus\n")
+	print("fileids:",brown.fileids())
+	print("Categories:",brown.categories())
+	print("Sentences:",brown.sents())
+	import nltk
+	from nltk.corpus import inaugural
+	print("Inaugural Corpus:")
+	print(inaugural.fileids())
+	[fileid[:4] for fileid in inaugural.fileids()]
+	import nltk
+	from nltk.corpus import udhr
+	print("udhr Corpus:")
+	print(udhr.fileids())
+output:
+2b) Create and use your own corpora (plaintext, categorical) 
+Steps to be performed -
+	Create a folder named “content”
+	https://drive.google.com/file/d/1UgGOkosQ83JVxzm3dHyYOdYjLmXA45CL/view?usp=sharing
+	download the above file and place it inside the “content” folder.
+Code:
+	import os, os.path
+	path = os.path.expanduser('~/natural_language_toolkit_data')
+	if not os.path.exists(path):
+	    os.mkdir(path)
+	    os.path.exists(path)
+	from nltk.corpus.reader import WordListCorpusReader
+	reader_corpus= WordListCorpusReader('.', ['desktop/content/wordfile.txt'])
+	print(reader_corpus.words())
 Output:
-
-1E) Create a mining function and test it.
-import hashlib
-def sha256(message):
-return hashlib.sha256(message.encode('ascii')).hexdigest()
-def mine(message, difficulty=1):
-assert difficulty >= 1
-prefix = '1' * difficulty
-print("prefix",prefix)
-for i in range(1000):
-digest = sha256(str(hash(message)) + str(i))
-print("testing=>"+digest)
-if digest.startswith(prefix):
-print ("after " + str(i) + " iterations found nonce: "+ digest)
-return i #i= nonce value
-mine ("test message",2)
+2c) Study Conditional frequency distributions
+Code:
+	text = ['The', 'Fulton', 'County', 'Grand', 'Jury', 'said', ...]
+	pairs = [('news', 'The'), ('news', 'Fulton'), ('news', 'County'), ...]
+	import nltk
+	from nltk.corpus import brown
+	fd = nltk.ConditionalFreqDist((genre, word)
+	for genre in brown.categories()
+	for word in brown.words(categories=genre))
+	genre_word = [(genre, word)
+	for genre in ['news', 'romance']
+	for word in brown.words(categories=genre)]
+	print(len(genre_word)) print(genre_word[:4])
+	print(genre_word[-4:])
+	cfd = nltk.ConditionalFreqDist(genre_word)
+	print(cfd) print(cfd.conditions()) print(cfd['news'])
+	print(cfd['romance']) print(list(cfd['romance']))
+	from nltk.corpus import inaugural
+	cfd = nltk.ConditionalFreqDist((target, fileid[:4])
+	for fileid in inaugural.fileids()
+	for w in inaugural.words(fileid)
+	for target in ['america', 'citizen']
+	if w.lower().startswith(target))
+	from nltk.corpus import udhr
+	languages = ['Chickasaw', 'English', 'German_Deutsch',
+	'Greenlandic_Inuktikut', 'Hungarian_Magyar', 'Ibibio_Efik']
+	cfd = nltk.ConditionalFreqDist((lang, len(word))
+	for lang in languages
+	for word in udhr.words(lang + '-Latin1'))
+	cfd.tabulate(conditions=['English', 'German_Deutsch'],
+	samples=range(10), cumulative=True)
+Output
+2d) Study of tagged corpora with methods like tagged_sents, tagged_words.
+code:	import nltk
+	from nltk import tokenize
+	nltk.download('punkt') nltk.download('words')
+	para = "Natural language processing (NLP) is a subfield of Artificial Intelligence (AI). This is a widely used technology for personal assistants that are used in various business 	fields/areas. This technology works on the speech provided by the user breaks it down for proper understanding and processes it accordingly."
+	sents = tokenize.sent_tokenize(para)
+	print("\nsentence tokenization\n=====\n",sents)print("\nword tokenization\n=======\n")
+	for index in range(len(sents)): words = tokenize.word_tokenize(sents[index])
+    		print(words)
 Output:
-
-1F) Add blocks to the miner and dump the blockchain.
-  Code: import hashlib
-import random
-import binascii
-import datetime
-import collections
-from Crypto.PublicKey import RSA
-from Crypto import Random
-from Crypto.Cipher import PKCS1_v1_5
-from collections import OrderedDict
-import Crypto
-import Crypto.Random
-from Crypto.Hash import SHA
-from Crypto.Signature import PKCS1_v1_5
-class Client:
-def init (self):
-random = Random.new().read
-self._private_key = RSA.generate(1024, random)
-self._public_key = self._private_key.publickey()
-self._signer = PKCS1_v1_5.new(self._private_key)
-@property
-def identity(self):
-return binascii.hexlify(self._public_key.exportKey(format='DER')).decode('ascii')
-class Transaction:
-def init (self, sender, recipient, value):
-self.sender = sender
-self.recipient = recipient
-self.value = value
-self.time = datetime.datetime.now()
-def to_dict(self):
-if self.sender == "Genesis":
-identity = "Genesis"
-else:
-identity = self.sender.identity
-return collections.OrderedDict({'sender': identity, 'recipient': self.recipient,
-'value': self.value, 'time' : self.time})
-def sign_transaction(self):
-private_key = self.sender._private_key
-signer = PKCS1_v1_5.new(private_key)
-h = SHA.new(str(self.to_dict()).encode('utf8'))
-return binascii.hexlify(signer.sign(h)).decode('ascii')
-def display_transaction(transaction):
-#for transaction in transactions:
-dict = transaction.to_dict()
-print ("sender: " + dict['sender']) print ('---- ') print ("recipient: " + dict['recipient']) print ('---- ')
-print ("value: " + str(dict['value'])) print ('---- ') print ("time: " + str(dict['time'])) print ('---- ')
-def dump_blockchain (self):
-print ("Number of blocks in the chain: " + str(len (self)))
-for x in range (len(TPCoins)):
-block_temp = TPCoins[x]
-print ("block # " + str(x))
-for transaction in block_temp.verified_transactions:
-display_transaction (transaction)
-print (' ')
-print ('=====================================')
-class Block:
-def init (self):
-self.verified_transactions = []
-self.previous_block_hash = ""
-self.Nonce = ""
-def sha256(message):
-return hashlib.sha256(message.encode('ascii')).hexdigest()
-def mine(message, difficulty=1):
-assert difficulty >= 1
-#if(difficulty <1):
-# return
-#'1'*3=> '111'
-prefix = '1' * difficulty
-for i in range(1000):
-digest = sha256(str(hash(message)) + str(i))
-if digest.startswith(prefix):
-return i #i= nonce value
-A = Client()
-B =Client()
-C =Client()
-t0 = Transaction ("Genesis", A.identity,500.0)
-t1 = Transaction (A, B.identity,40.0)
-t2 = Transaction (A, C.identity,70.0)
-t3 = Transaction (B, C.identity,700.0)
-#blockchain
-TPCoins = []
-block0 = Block()
-block0.previous_block_hash = None
-Nonce = None
-block0.verified_transactions.append (t0)
-digest = hash (block0)
-last_block_hash = digest #last_block_hash it is hash of block0
-TPCoins.append (block0)
-block1 = Block()
-block1.previous_block_hash = last_block_hash
-block1.verified_transactions.append (t1)
-block1.verified_transactions.append (t2)
-block1.Nonce=mine (block1, 2)
-digest = hash (block1)
-last_block_hash = digest
-TPCoins.append (block1)
-block2 = Block()
-block2.previous_block_hash = last_block_hash
-block2.verified_transactions.append (t3)
-Nonce = mine (block2, 2)
-block2.Nonce=mine (block2, 2)
-digest = hash (block2)
-last_block_hash = digest
-TPCoins.append (block2)
-dump_blockchain(TPCoins)
+2e) Write a program to find the most frequent noun tags.
+	import nltk
+	nltk.download('averaged_perceptron_tagger')
+	from collections import defaultdict
+	text=nltk.word_tokenize("Nick does like to play football. Nick does not like to play cricket")
+	print(text)
+	tags=nltk.pos_tag(text)
+	addNounWordS=[]
+	count=0
+	for words in tags: val=tags[count][1]
+	    if(val=='NN' or val=='NNS' or val=='NNPS'or val=='NNP'):
+	        addNounWordS.append(tags[count][0])
+	    count+=1
+	print(count) print(addNounWordS)
+	temp=defaultdict(int)
+	for sub in addNounWordS:
+	    for wrd in sub.split(): temp[wrd]+=1
+		res=max(temp,key=temp.get)
+		print(temp) print("Word with maximum frequency : " + str(res))
+output 
+2f) Map Words to Properties Using Python Dictionaries.
+	thisdict = {"brand": "Ford", "model": "Mustang","year": 1964}
+	print(thisdict) print(thisdict["brand"])
+	print(len(thisdict)) print(type(thisdict))
+output:
+Practical No: 3
+Aim: Study of wordnet Dictionary 
+3a) Study of Wordnet Dictionary with methods as synsets, definitions, examples, antonyms.
+Code:
+	import nltk
+	nltk.download('wordnet')
+	from nltk.corpus import wordnet
+	try:
+	    syn = wordnet.synsets('game')[0]
+	    print ("Synset name : ", syn.name())
+	    print ("\nSynset meaning : ", syn.definition())    
+	    print ("\nSynset example : ", syn.examples())     
+	except IndexError:
+	    print('word not found!')
+output:
+3b) Study lemmas, hyponyms, hypernyms
+	import nltk
+	from nltk.corpus import wordnet
+	nltk.download('wordnet')
+	syn = wordnet.synsets('hello')[0] print ("Syn tag for hello: ", syn.pos())
+	syn = wordnet.synsets('doing')[0] print ("Syn tag for doing: ", syn.pos())
+	syn = wordnet.synsets('beautiful')[0] print ("Syn tag for beauiful: ", syn.pos())
+	syn = wordnet.synsets('quickly')[0] print ("Syn tag for quickly: ", syn.pos())
 Output:
-
-Practical No: 2A
-Aim: write a solidity program for variables, operators, loops, decision making and string.
-A) Variables: supports three types of variables. 
-State Variables − Variables whose values are permanently stored in a contract storage. 
-Local Variables − Variables whose values are present till function is executing. 
-Global Variables − Special variables exists in the global namespace used to get information about the blockchain. i.e. blockhash(uint blockNumber) returns (bytes32), block.coinbase (address payable), block.difficulty (uint)…..and many more 
-Step 1: Open this website https://remix.ethereum.org/ 
-Step 2: Create new file – practical.sol  
- 
-Step 3: Write this program in the new file 
-pragma solidity ^0.5.0; 
-contract SolidityTest { uint storedData; 
-constructor() public { storedData = 10; } 
-function getResult() public view returns(uint){ uint a = 1; uint b = 2; uint result = a + b; 
-return result; }}
-Step 4: Compile contract 
-    
-Step 5: Deploy contract 
-     
-Step 6: Select the contract and click button 
- 
-1.	State Variable: 
-// Solidity program to demonstrate state variables 
-pragma solidity ^0.5.0; 
-contract Solidity_var_Test { 
-uint8 public state_var; 
-constructor() public { state_var = 16; 
-} } 
- 
-2.	Local Variable: 
- 		// Solidity program to demonstrate local variables 
- pragma solidity ^0.5.0; 
-// Creating a contract 
-   contract Solidity_var_Test { 
-// Defining function to show the declaration & scope of local variables
-		    function getResult() public view returns(uint){
-// Initializing local variables
-   uint local_var1 = 1;
-   uint local_var2 = 2;
-   		   uint result = local_var1 + local_var2;
-// Access the local variable
-   return result; }}
-                              	 
-3.	 Global variable: 
-// Solidity program to show Global variables 
-pragma solidity ^0.5.0; 
-// Creating a contract 
-contract Test { 
-// Defining a variable 
-address public admin; 
-// Creating a constructor to use Global variable 
-constructor() 
-public { admin = msg.sender; 
-} } 
-   
-Scope of local variables is limited to function in which they are defined but State variables can have 3 types of scopes. 
-Public: Public state variables can be accessed internally as well as via messages. For a public state variable, an automatic getter function is generated. 
-Internal: Internal state variables can be accessed only internally from the current contract or contract deriving from it without using this. 
-Private: Private state variables can be accessed only internally from the current contract they are defined not in the derived contract from it. 
-B) Operators: Solidity supports the following types of operators. 
-Arithmetic Operators 
-Comparison Operators 
-Logical (or Relational) Operators 
-Assignment Operators 
-Conditional (or ternary) Operators 
-1.	 Arithematic Operator 
-// Solidity contract to demonstrate Arithematic Operator 
-pragma solidity ^0.5.0; 
-// Creating a contract 
-contract SolidityTest { 
-uint16 public a = 20; 
-uint16 public b = 10; 
-uint public sum = a + b; 
-uint public diff = a - b; 
-uint public mul = a * b; 
-uint public div = a / b; 
-uint public mod = a % b; 
-uint public dec = --b; 
-uint public inc = ++a; 
-} 
-  
-2.	Relational Operator 
-// Solidity program to demonstrate Relational Operator.
-pragma solidity^0.5.0;
-// Creating a contract
-contract SolidityTest
-{
-// Declaring variables
-uint16 public a = 20;
-uint16 public b = 10;
-// Initializing a variable with bool equal result
-bool public eq = a ==b;
-// Initializing a variable with bool not equal result
-bool public note q = a != b;
-// Initializing a variable with bool greater than result
-bool public gtr = a > b;
-// Initializing a variable with bool less than result
-bool public les = a < b;
-// Initializing a variable with bool greater than equal to result
-bool public gtr eq = a >= b;
-// Initializing a variable bool less than equal to result
-bool public les eq = a <= b;
-}
-3.	Logical Operators 
-// Solidity program to demonstrate Logical Operators.
- 			pragma solidity^0.5.0;
-// Creating a contract
-contract logicalOperator
-{ function Logic (bool a, bool b) 
-public view returns ( bool, bool, bool){
-// Logical AND operator
-bool and = a && b;
-// Logical OR operator
-bool or = a || b;
-// Logical NOT operator
-bool not = ! a ;
-	return (and , or , not); 
-}}
-4.	Bitwise Operators 
-// Solidity program to demonstrate Bitwise Operator 
- 			pragma solidity^0.5.0;
-// Creating a contract
-contract SolidityTest
-{
-uint16 public a = 20;
-uint16 public b = 10;
-// Initializing a variable to '&' value
-uint16 public and = a &b;
-// Initializing a variable to '|' value
-uint16 public or = a | b;
-// Initializing a variable/ to '^' value
-uint16 public xor = a ^ b;
-// Initializing a variable to '<<' value
-uint16 public leftshift = a << b ;
-// Initializing a variable to '>>' value
-uint16 public rightshift = a  >> b;
-// Initializing a variableto '~' value
-uint16 public not = ~ a;
-}
-5.	Assignment Operator 
-// Solidity program to demonstrate Assignment Operator 
- 			pragma solidity^0.5.0;
-contract SolidityTest{
-uint16 public assignment = 20;
-uint public assignment_add = 50;
-uint public assign_sub = 50;
-uint public assign_mul = 10;
-uint public assign_div = 50;
-uint public assign_mod= 32;
-// Defining function to demonstrate Assignment Operator
-function getResult() 
-public{
-assignment_add += 10;
-assign_sub-= 20;
-assign_mul *= 10;
-assign_div /= 10;
-assign_mod %= 20;
-return;
-}}
-6.	Conditional Operators 
-// Solidity program to demonstrate Conditional Operator 
- 			pragma solidity^0.5.0;
-contract SolidityTest{
-function sub(uint a, uint b) 
-public view returns(uint){
-uint result = (a > b? a-b : b-a);
-return result;
-}}
-c) Loops: 
-	While loop: The most basic loop in Solidity is the while loop which would be discussed in this chapter. The purpose of a while loop is to execute a statement or code block repeatedly as long as an expression is true. Once the expression becomes false, the loop terminates. 
-	do-while loop: The do while loop is similar to the while loop except that the condition check happens at the end of the loop. This means that the loop will always be executed at least once, even if the condition is false. 
-	for loop: The for loop is the most compact form of looping. It includes the following three important parts 
-1.	The loop initialization where we initialize our counter to a starting value. The initialization statement is executed before the loop begins.
-2.	The test statement which will test if a given condition is true or not. If the condition is true, then the code given inside loop will be executed, otherwise the control will come out of loop. 
-3.	The iteration statement where you can increase or decrease your counter. 
-	loop control: Solidity provides full control to handle loops and switch statements. There may be a situation when you need to come out of a loop without reaching its bottom. There may also be a situation when you want to skip a part of your code block and start the next iteration of the loop.To handle all such situations, Solidity provides break and continue statements. These statements are used to immediately come out of any loop or to start the next iteration of any loop respectively. 
-1.	While Loop:
-pragma solidity^0.5.0;
-contract SolidityTest{ 
-uint storedData;
-constructor() 
-public{storedData = 10;}
-function getResult() public view returns
-(string memory){ uint a= 10;
-uint b = 2;
-uint result = a + b ;
-return integerToString(result);
-}
-function integerToString(uint _i) internal pure
-returns(string memory){
-if (_i ==0)
-{return "0";}
-uint j = _i;
-uint len;
-while (j !=0){
-len++; j /= 10;}
-bytes memory bstr = new bytes(len);
-uint k = len -1;
-while(_i !=0) { 
-// while loop
-bstr[k--]= byte
-(uint8(48+ _i % 10));
-_i /= 10;
-}
-return string(bstr);
-}} 
-2.	Do-while loop: 
- 			pragma solidity^0.5.0;
-contract SolidityTest {
-uint storedData;
-constructor() public{
-storedData = 10;
-}
-function getResult() public view returns(string memory){
-uint a= 10;
-uint b = 2;
-uint result = a+b;
-return integerToString (result); 
-} 
-function integerToString (uint _i) internal pure 
-returns (string memory ) { 
-if (_i == 0 ) { 
-return "0" ; 
-} 
-uint j = _i ; 
-uint len ; 
-while (j != 0 ) { 
-len++; 
-j /= 10 ; 
-} 
-bytes memory bstr = new bytes (len); 
-uint k = len - 1 ; 
-do { // do while loop 
-bstr [ k-- ] = byte (uint8 (48 + _i % 10)); 
-_i /= 10 ; 
-} 
-while (_i != 0); 
-return string (bstr); 
-}}  
-3.	For Loop: 
-pragma solidity ^0.5.0 ; 
-contract SolidityTest { 
-uint storedData ; 
-constructor() public { 
-storedData = 10 ; 
-} 
-function getResult() public view returns (string memory){ 
-uint a = 10; 
-uint b = 2; 
-uint result = a + b; 
-return integerToString (result);} 
-function integerToString (uint _i) 
-internal pure returns (string memory) { 
-if (_i == 0) { 
-return "0"; 
-} 
-uint j = 0; 
-uint len; 
-for (j = _i; j!= 0; j /= 10) {
- //for loop example len++; 
-} bytes memory bstr = new bytes (len); 
-uint k = len - 1 ; 
-while (_i != 0 ) { 
-bstr [ k-- ] = byte (uint8 (48 + _i % 10)); 
-_i /= 10 ; 
-} 
-return string (bstr);
-}}
-4.	loop Control: (Break statement) 
-pragma solidity ^0.5.0; 
-contract SolidityTest { 
-uint storedData; 
-constructor() public{ 
-storedData = 10 ; 
-} 
-function getResult() public view returns (string memory){ 
-uint a = 1;
-uint b = 2; 
-uint result = a + b; 
-return integerToString (result); 
-} 
-function integerToString (uint _i) internal pure 
-returns (string memory) {
- if (_i == 0) { 
-return "0"; 
-} 
-uint j = _i;
-uint len; 
-while (true ) { 
-len++; 
-j /= 10; 
-if(j== 0){ 
-break ; //using break statement 
-}} 
-bytes memory bstr = new bytes (len);
-uint k = len - 1; 
-while (_i != 0 ) {
-bstr [ k-- ] = byte (uint8 (48 + _i % 10));
-_i /= 10 ; } 
-return string (bstr);
-}}
-(continue statement) 
-		pragma solidity ^0.5.0; 
-contract SolidityTest { 
-uint storedData; 
-constructor() public { 
-storedData = 10 ; 
-} 
-function getResult() public view returns (string memory){ 
-uint n = 1; 
-uint sum = 0;
-while ( n < 10){ 
-n++; 
-if(n == 5){ 
-continue; 
-} 
-sum = sum + n; 
-} 
-return integerToString (sum); 
-} 
-function integerToString (uint _i) internal pure 
-returns (string memory ) { 
-if (_i == 0 ) { 
-return "0"; 
-} 
-uint j = _i; 
-uint len; 
-while (true ) { 
-len++; 
-j /= 10; 
-if(j== 0){ 
-break; 
-}}
-bytes memory bstr = new bytes(len);
-uint k = len - 1;
-while (_i != 0) {
-bstr[k--] = byte(uint8(48 + _i % 10));
-_i /= 10;
-}
-return string(bstr);
-}} 
-D) Decision Making: 
-While writing a program, there may be a situation when you need to adopt one out of a given set of paths. In such cases, you need to use conditional statements that allow your program to make correct decisions and perform right actions.Solidity supports conditional statements which are used to perform different actions based on different conditions. Here we will explain the if..else statement. 
-1.	if statement: The if statement is the fundamental control statement that allows Solidity to make decisions and execute statements conditionally. 
-pragma solidity ^0.5.0;
-contract SolidityTest {
-uint storedData;
-constructor() public {
-storedData = 10;
-}
-function getResult() public view returns(string memory){
-uint a = 1;
-uint b = 2;
-uint result = a + b;
-return integerToString(result);
-}
-function integerToString(uint _i) internal pure
-returns (string memory) {
-if (_i == 0) { // if statement
-return "0";
-}
-uint j = _i;
-uint len;
-while (j != 0) {
-len++;
-j /= 10;
-}
-bytes memory bstr = new bytes(len);
-uint k = len - 1;
-while (_i != 0) {
-bstr[k--] = byte(uint8(48 + _i % 10));
-_i /= 10;
-}
-return string(bstr);//access local variable
-}}  
-2.	if-else statement: The 'if...else' statement is the next form of control statement that allows Solidity to execute statements in a more controlled way. 
- 			pragma solidity ^0.5.0;
-contract Types {
-uint i = 10;
-bool even;
-// Defining function to demonstrate the use of 'if...else statement'
-function decision_making() 
-public payable returns(bool){
-if (i%2 == 0){
-even = true;
-}
-else{
-even = false;
-}
-return even;
-}
-}
-3.	if-else..if statement: The if...else if... statement is an advanced form of if...else that allows Solidity to make a correct decision out of several conditions. 
-pragma solidity^0.5.0;
-contract Types {
-// Declaring state variables
-uint i = 12;
-string result;
-function decision_making() 
-public returns(string memory){
-if(i<10){
-result= "less than 10";
-}
-else if(i == 10){
-result= "equal to 10";
-}
-else
-{
-result = "greater than 10";
-}
-return result;
-}}
-String: 
-// Solidity program to demonstrate how to create a contract 
-	pragma solidity^0.4.23;
-contract Test{
-string str;
-constructor(string str_in){
-str = str_in;
-}
-function str_out() public view returns(string memory){
-return str;
-}}
-Note: after deploy it asked u to enter string then enter string over there and then see the output after clicking on str_out button. 
-Practical No: 2B
-AIM: Write a solidity program for string, arrays, enums, structure & mappings. 
-A) String: 
-Solidity supports String literal using both double quote (") and single quote ('). It provides string as a data type to declare a variable of type String.(Int to str) 
- 			pragma solidity ^0.5.0;
-contract SolidityTest {
-constructor() public{
-}
-function getResult() public view returns(string memory){
-uint a = 1;
-uint b = 2;
-uint result = a + b;
-return integerToString(result);
-}
-function integerToString(uint _i) internal pure
-returns (string memory) {
-if (_i == 0) {
-return "0";
-}
-uint j = _i;
-uint len;
-while (j != 0) {
-len++;
-j /= 10;
-}
-bytes memory bstr = new bytes(len);
-uint k = len - 1;
-while (_i != 0) { bstr[k--] = byte(uint8(48 + _i % 10));
-_i /= 10;
-}
-return string(bstr);
-}}
-B) Array: 
-Array is a data structure, which stores a fixed-size sequential collection of elements of the same type. An array is used to store a collection of data, but it is often more useful to think of an array as a collection of variables of the same type. 
-// Solidity program to demonstrate accessing elements of an array 
-pragma solidity ^0.5.0;
-// Creating a contract
-contract Types {
-// Declaring an array
-uint[6] data;
-uint x;
-// Defining function to assign values to array
-function array_example() public returns (uint[6] memory)
-{ data = [uint(10), 20, 30, 40, 50, 60];
-}
-function result() public view returns(uint[6] memory){
-return data;
-}
-// Defining function to access values from the array from a specific index
-function array_element() public view returns (uint){
-uint x = data[2];
-return x;
-}} 
-C) Enums:  
-Enums restrict a variable to have one of only a few predefined values. The values in this enumerated list are called enums. With the use of enums it is possible to reduce the number of bugs in your code. 
-// Solidity program to demonstrate how to use 'enumerator' 
-pragma solidity^0.5.0;
-// Creating a contract
-contract Types {
-// Creating an enumerator
-enum week_days {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
-// Declaring variables of type enumerator
-week_days week;
-week_days choice;
-// Setting a default value
-week_days constant default_value = week_days.Sunday;
-// Defining a function to set value of choice
-function set_value() 
-public{choice= week_days.Thursday;}
-// Defining a function to return value of choice
-function get_choice ()
-public view returns (week_days)
-{
-return choice;
-}
-// Defining function to return default value
-function getdefaultvalue() 
-public pure returns (week_days)
-{
-return default_value;
-}} 
-D) Structure: 
-Struct types are used to represent a record. 
-	pragma solidity ^0.5.0;
-contract test {
-struct Book { string title; string author; uint book_id;}
-Book book;
-function setBook() public {
-book = Book('Learn Java', 'TP', 1);
-}
-function getBookId() public view returns (uint) {
-return book.book_id;
-}} 
-E) Mappings:  
-Mapping is a reference type as arrays and structs. Following is the syntax to declare a mapping type. 
-mapping(_KeyType => _ValueType) 
-were, 
-_KeyType : can be any built-in types plus bytes & string. No reference type or complex objects are allowed. 
-_ValueType − can be any type. 
-		pragma solidity ^0.5.0;
-contract LedgerBalance {
-mapping(address => uint) balance;
-function updateBalance() public returns(uint) {
-balance[msg.sender]=30;
-return balance[msg.sender];
-}} 
-Mapping program for String. 
- 				pragma solidity ^0.5.0;
-contract LedgerBalance {
-mapping(address => string) name;
-function updateBalance() public returns(string memory){
-name[msg.sender] = "Mrunali";
-return name[msg.sender];
-}
-function printsender() 
-public view returns(address) { 
-return msg.sender;
-}}
-
-Practical No: 3A
-AIM: Write a solidity program for function, view function, pure Function & fallback function. 
-A) Function: 
-A function is a group of reusable code which can be called anywhere in your program. This eliminates the need of writing the same code again and again. It helps programmers in writing modular codes. Functions allow a programmer to divide a big program into a number of small and manageable functions. 
- 			pragma solidity ^0.5.0;
-contract SolidityTest {
-constructor() public{
-}
-function getResult() public view returns(string memory){
-uint a = 1;
-uint b = 2;
-uint result = a + b;
-return integerToString(result);
-}
-function integerToString(uint _i) internal pure
-returns (string memory) {
-if (_i == 0) {
-return "0";
-}
-uint j = _i;
-uint len;
-while (j != 0) {
-len++;
-j /= 10;
-}
-bytes memory bstr = new bytes(len);
-uint k = len - 1;
-while (_i != 0) {
-bstr[k--] = byte(uint8(48 + _i % 10));
-_i /= 10;
-}
-return string(bstr);//access local variable
-}
-}  
-B) View Function: 
-View functions ensure that they will not modify the state. A function can be declared as view. Getter method are by default view functions. 
- 			pragma solidity ^0.5.0;
-contract Test {
-function getResult() public view returns(uint product, uint sum){
-uint a = 1; // local variable
-uint b = 2;
-product = a * b;
-sum = a + b;
-}
-}
-C) Pure Function: 
-Pure functions ensure that they not read or modify the state. A function can be declared as pure. Pure functions can use the revert() and require() functions to revert potential state changes if an error occurs. 
- 			pragma solidity ^0.5.0;
-contract Test {
-function getResult() public pure returns(uint product, uint sum){
-uint a = 1;
-uint b = 2;
-product = a * b;
-sum = a + b;
-}}
-D) Fallback Function: 
-Fallback function is a special function available to a contract. 
- 			pragma solidity ^0.5.0;
-contract Test {
-uint public x ;
-function() external { x = 1; }
-}
-contract Sink {
-	function() external payable { }
-}
-contract Caller {
-function callTest(Test test) public returns (bool) {
-(bool success,) = address(test).call(abi.encodeWithSignature("nonExistingFunction()"));
-require(success);
-// test.x is now 1
-address payable testPayable = address(uint160(address(test)));
-// Sending ether to Test contract,
-// the transfer will fail, i.e. this returns false here.
-return (testPayable.send(2 ether));
-}
-function callSink(Sink sink) public returns (bool) {
-address payable sinkPayable = address(sink);
-return (sinkPayable.send(2 ether));
-}
-}
-
-
- 
-Practical No: 3B
-Aim: Write a solidity program for function overloading, mathematical function & cryptographic functions. 
-Function Overloading: 
-The definition of the function must differ from each other by the types and/or the number of arguments in the argument list. You cannot overload function declarations that differ only by return type. 
-			pragma solidity ^0.5.0;
-contract Test {
-function getSum(uint a, uint b) public pure returns(uint){
-return a + b;
-}
-function getSum(uint a, uint b, uint c ) public pure returns(uint){
-return a + b + c;
-}
-function callSumWithTwoArguments() public pure returns(uint){
-return getSum(2,2);
-}
-function callSumWithThreeArguments() public pure returns(uint){
-return getSum(1,2,4);
-}
-} 
-          Mathematical Function: 
-Solidity provides inbuilt mathematical functions as well. 
- 			pragma solidity ^0.5.0;
-contract Test {
-function callAddMod() public pure returns(uint){
-return addmod(4, 5, 3);
-}
-function callMulMod() public pure returns(uint){
-return mulmod(4, 5, 3);
-}
-}
-Cryptographic Function: 
-Solidity provides inbuilt cryptographic functions as well. 
- 			pragma solidity ^0.5.0;
-contract Test {
-function callKeccak256() public pure returns(bytes32 result){
-return keccak256("ABC");
-}
-}
-
- 
+3c) Write a program using python to find synonym and antonym of word "active" using Wordnet.
+code:	import nltk
+	from nltk.corpus import wordnet
+	print( wordnet.synsets("active"))  print(wordnet.lemma('active.a.01.active').antonyms())
+output:
+3d) Compare two nouns
+code:	import nltk 
+	from nltk.corpus import wordnet 
+	syn1 = wordnet.synsets(computer) 
+	syn2 = wordnet.synsets(calculator) 
+	for s1 in syn1: 
+	for s2 in syn2: 
+	print("Path similarity of: ") 
+	print(s1, '(', s1.pos(), ')', '[', s1.definition(), ']') 
+	print(s2, '(', s2.pos(), ')', '[', s2.definition(), ']') 
+	print(" is", s1.path_similarity(s2)) 
+	print()
+3e) Handling stopword. 
+i. Using nltk Adding or Removing Stop Words in NLTK's Default Stop Word List. 
+Code:    import nltk
+	from nltk.corpus import stopwords
+	nltk.download('stopwords')
+	from nltk.tokenize import word_tokenize
+	text = "Yashesh likes to play football, however he is not too fond of tennis."
+	text_tokens = word_tokenize(text)
+	tokens_without_sw = [word for word in text_tokens if not word in
+	stopwords.words()]
+	print(tokens_without_sw)
+	#add the word play to the NLTK stop word collection
+	all_stopwords = stopwords.words('english')
+	all_stopwords.append('play')
+	text_tokens = word_tokenize(text)
+	tokens_without_sw = [word for word in text_tokens if not word in all_stopwords]
+	print(tokens_without_sw)
+	#remove ‘not’ from stop word collection
+	all_stopwords.remove('not')
+	text_tokens = word_tokenize(text)
+	tokens_without_sw = [word for word in text_tokens if not word in all_stopwords]
+	print(tokens_without_sw)
+Output:
+ii. Using Gensim Adding and Removing Stop Words in Default Gensim Stop Words List. 
+Code:	import nltk
+	from nltk.tokenize import word_tokenize
+	import gensim
+	from gensim.parsing.preprocessing import remove_stopwords
+	text = "Yashesh likes to play football, however he is not too fond of tennis."
+	filtered_sentence = remove_stopwords(text)
+	print(filtered_sentence)
+	all_stopwords = gensim.parsing.preprocessing.STOPWORDS
+	print(all_stopwords)
+	'''The following script adds likes and play to the list of stop words in Gensim:'''
+	from gensim.parsing.preprocessing import STOPWORDS
+	all_stopwords_gensim = STOPWORDS.union(set(['likes', 'play']))
+	text = "Yashesh likes to play football, however he is not too fond of tennis."
+	text_tokens = word_tokenize(text)
+	tokens_without_sw = [word for word in text_tokens if not word in
+	all_stopwords_gensim]
+	print(tokens_without_sw)
+Output:
 Practical No: 4
-Aim: write a solidity program for contract, inheritance, Constructors, abstract contracts, 
-        interfaces, libraries, assembly, events, error handling. 
-4A) Contract: 
-Contract in Solidity is similar to a Class in C++. A Contract have following properties.
-Constructor − A special function declared with constructor keyword which will be executed once per contract and is invoked when a contract is created. 
-State Variables − Variables per Contract to store the state of the contract. 
-Functions − Functions per Contract which can modify the state variables to alter the state of a contract. 
-// Calling function from external contract 
-				pragma solidity ^0.5.0;
-contract C {
-//private state variable
-uint private data;
-//public state variable
-uint public info;
-//constructor
-constructor() public {
-info = 10;
-}
-//private function
-function increment(uint a) private pure returns(uint) { return a + 1; }
-//public function
-function updateData(uint a) public { data = a; }
-function getData() public view returns(uint) { return data; }
-function compute(uint a, uint b) internal pure returns (uint) { return a + b; }
-}
-//Derived Contract
-contract E is C {
-uint private result;
-C private c;
-constructor() public {
-c = new C();
-}
-function getComputedResult() public {
-result = compute(3, 5);
-}
-function getResult() public view returns(uint) { return result; }
-function getData() public view returns(uint) { return c.info(); }
-}
-4B) Inheritance: 
-Inheritance is a way to extend functionality of a contract. Solidity supports both single as well as multiple inheritance. 
-// Solidity program to demonstrate Single Inheritance 
- 			pragma solidity >=0.4.22 <0.6.0;
-// Defining contract
-contract parent{
-// Declaring internal state variable
-uint internal sum;
-// Defining external function to set value of internal state variable sum
-function setValue() external {
-uint a = 20;
-uint b = 20;
-sum = a + b;  }}
-// Defining child contract
-contract child is parent{
-// Defining external function to return value of internal state variable sum
-function getValue() external view returns(uint) {
-return sum;
-}}
-4C) Constructors: 
-Constructor is a special function declared using constructor keyword. It is an optional function & it is used to initialize state variables of a contract. Following are the key characteristics of a constructor. 
-A contract can have only one constructor. 
-A constructor code is executed once when a contract is created and it is used to initialize contract state. 
-A constructor can be either public or internal. 
-An internal constructor marks the contract as abstract. 
-In case, no constructor is defined, a default constructor is present in the contract. 
-pragma solidity ^0.5.0;
-contract Base {
-uint data;
-constructor(uint _data) public {
-data = _data;
-}
-function getresult()public view returns(uint){
-return data;
-}}
-contract Derived is Base (5) {
-constructor() public {}
-}
-4D) Abstract Contracts: 
-  Abstract Contract is one which contains at least one function without any implementation. Such a     
-  contract is used as a base contract. Generally, an abstract contract contains both implemented as     
-  well as abstract functions. Derived contract will implement the abstract function and use the existing   
-  functions as and when required. 
-pragma solidity ^0.5.0;
-contract Calculator {
-function getResult() public view returns(uint);
-}
-contract Test is Calculator {
-function getResult() public view returns(uint) {
-uint a = 4;
-uint b = 2;
-uint result = a + b;
-return result;
-}}
-4E) Interfaces:
-Interfaces are similar to abstract contracts and are created using interface keyword. Following are the key characteristics of an interface. 
-Interface can not have any function with implementation. 
-Functions of an interface can be only of type external. 
-Interface can not have constructor. 
-Interface can not have state variables.
- pragma solidity ^0.5.0;
-interface Calculator {
-function getResult() external view returns(uint);
-}
-contract Test is Calculator {
-constructor() public {}
-function getResult() external view returns(uint){
-uint a = 5;
-uint b = 2;
-uint result = a + b;
-return result; }} 
-4f) Libraries: 
-Libraries are similar to Contracts but are mainly intended for reuse. A Library contains functions which other contracts can call. Solidity have certain restrictions on use of a Library. 
- pragma solidity ^0.5.0;
-library Search {
-function indexOf(uint[] storage self, uint value) public view returns (uint) {
-for (uint i = 0; i < self.length; i++)
-if (self[i] == value) return i;
-return uint(-1);}
-}
-contract Test {
-uint[] data;
-uint value;
-uint index;
-constructor() public {
-data.push(6);
-data.push(7);
-data.push(8);
-data.push(9);
-data.push(10);
-}
-function isValuePresent() external {
-value = 9;
-//search if value is present in the array using Library function
-index = Search.indexOf(data, value);
-}
-function getresult() public view returns(uint){
-return index;
-}}  
-4G) Assembly: 
-Solidity provides an option to use assembly language to write inline assembly within Solidity source code. We can also write a standalone assembly code which then be converted to bytecode. Standalone Assembly is an intermediate language for a Solidity compiler and it converts the Solidity code into a Standalone Assembly and then to byte code. We can used the same language used in Inline Assembly to write code in a Standalone assembly. 
- 			pragma solidity ^0.5.0;
-library Sum {
-function sumUsingInlineAssembly(uint[] memory _data) public pure returns (uint o_sum) {
-for (uint i = 0; i < _data.length; ++i) {
-assembly {
-o_sum := add(o_sum, mload(add(add(_data, 0x20), mul(i, 0x20))))
-}}}}
-contract Test {
-uint[] data;
-constructor() public {
-data.push(1);
-data.push(2);
-data.push(3);
-data.push(4);
-data.push(5);
-}
-function sum() external view returns(uint){
-			return Sum.sumUsingInlineAssembly(data);
-}}  
-4H) Events: 
-Event is an inheritable member of a contract. An event is emitted, it stores the arguments passed in transaction logs. These logs are stored on blockchain and are accessible using address of the contract till the contract is present on the blockchain. An event generated is not accessible from within contracts, not even the one which have created and emitted them. 
-// Solidity program to demonstrate creating an event 
-pragma solidity ^0.4.21;
-// Creating a contract
-contract eventExample {
-// Declaring state variables
-uint256 public value = 0;
-// Declaring an event
-event Increment(address owner);
-// Defining a function for logging event
-function getValue(uint _a, uint _b) public {
-emit Increment(msg.sender);
-value = _a + _b;
-}
-} 
-4I) Error Handling: 
-Solidity provides various functions for error handling. Generally when an error occurs, the state is reverted back to its original state. Other checks are to prevent unauthorized code access. 
-Solidity program to demonstrate require statement. 
-// Solidity program to demonstrate require statement
-pragma solidity ^0.5.0;
-// Creating a contract
-contract requireStatement {
-// Defining function to check input
-function checkInput(uint8 _input) public view returns(string memory){
-require(_input >= 0, "invalid uint");
-require(_input <= 255, "invalid uint8");
-return "Input is Uint8";
-}
-// Defining function to use require statement
-function Odd(uint _input) public view returns(bool){
-require(_input % 2 != 0);
-return true;
-}
-} 
- 			Solidity program to demonstrate assert statement. 
-    // Solidity program to demonstrate assert statement 
-    pragma solidity ^0.5.0;
-    // Creating a contract
-    contract assertStatement {
-    // Defining a state variable
-    bool result;
-// Defining a function to check condition
-function checkOverflow(uint8 _num1, uint8 _num2) public {
-uint8 sum = _num1 + _num2;
-assert(sum<=255);
-result = true;
-}
-// Defining a function to print result of assert statement
-function getResult() public view returns(string memory){
-if(result == true){
-return "No Overflow";
-}
-else{
-return "Overflow exist";
-}
-}}  
-Solidity program to demonstrate revert statement. 
-// Solidity program to demonstrate revert 
-pragma solidity ^0.5.0;
-// Creating a contract
-contract revertStatement {
-// Defining a function to check condition
-function checkOverflow(uint _num1, uint _num2) public view returns(
-string memory, uint) {
-uint sum = _num1 + _num2;
-if(sum < 0 || sum > 255){
-revert(" Overflow Exist");
-}
-else{
-return ("No Overflow", sum);
-}
-}
-}
+Aim: Performing Text Tokenization using various functions and libraries. 
+4a) Tokenization using python split function.
+code: 	text = """ This tool is a beta stage. Alexa developers can use Get Metrics API to seamlessly analyse metric. It also supports custom skill model, prebuilt Flash Briefing model, and 	the Smart Home Skill API. You can use this tool for creation of monitors, alarms, and dashboards that spotlight changes. The release of these three tools will enable developers to 	create visual rich skills for Alexa devices with screens. Amazon describes these tools as the collection of tech and tools for creating visually rich and interactive voice 	experiences. """
+	data = text.split('.')
+	for i in data:
+	   	 print (i)
+output:
+4b) Tokenization using python regular expression (RegEx).
+code:	import nltk
+	from nltk.tokenize import RegexpTokenizer
+	tk = RegexpTokenizer('\s+', gaps = True)
+	str = "I love to study Natural Language Processing in Python"
+	tokens = tk.tokenize(str)
+	print(tokens)
+output:
+4c) Tokenization using NLTK
+code:	import nltk
+	from nltk.tokenize import word_tokenize
+	str = "I love to study Natural Language Processing in Python"
+	print(word_tokenize(str))
+4d) Tokenization using the spacy library.
+Command to execute in cmd:
+	pip install spacy
+Code:
+	import spacy
+	nlp = spacy.blank("en")
+	str = "I love to study Natural Language Processing in Python"
+	doc = nlp(str)
+	words = [word.text for word in doc]
+	print(words)
+4e) Tokenization using Keras
+Command to execute in cmd:
+	pip install keras
+	pip install tensorflow
+Code:
+	from tensorflow.keras.preprocessing.text import text_to_word_sequence
+	text="I love to study Natural Language Processing in Python"
+	result=text_to_word_sequence(text)
+	print(result)
+4f) Tokenization using Gensim.
+Command to execute in cmd:
+	pip install gensim
+Code:
+	import nltk
+	import gensim
+	from gensim.utils import tokenize
+	str="I love to study Natural Language Processing in python"
+	print(list(tokenize(str)))
 Practical No: 5
-Aim: Install hyperledger-Irhoa
-Step 1: Install docker
-sudo apt-get install curl
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu
-$(lsb_release -cs) stable"
-sudo apt-get update
-apt-cache policy docker-ce
-sudo apt-get install -y docker-ce
-Step 2: Create docker network
-sudo docker network create mithilesh-iroha-network
-Step 3: Add PostgreSQL to our network
-sudo docker run --name some-postgres -e POSTGRES_USER=postgres -e
-POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 --network=mithilesh-iroha network -d postgres:9.5
-Step 4: Create a volume of persistant storage named "blockstore" to store the blocks for our 
-blockchain
-sudo docker volume create blockstore
-Step 5: Download the Iroha code from github.
-sudo apt-get install git
-git clone -b develop https://github.com/hyperledger/iroha --depth=1
-Step 6: run the Iroha docker container
-sudo docker run -it --name iroha \
--p 50051:50051 \
--v $(pwd)/iroha/example:/opt/iroha_data \
--v blockstore:/tmp/block_store \
---network=mithilesh-iroha-network \
---entrypoint=/bin/bash \
-hyperledger/iroha:latest
-Step 7: run Iroha
-irohad --config config.docker --genesis_block genesis.block --keypair_name node0
-Step 8: Open a new terminal
-Step 9: attach the docker container to our terminal
-sudo docker exec -it iroha /bin/bash
-Step 10: Launch the iroha-cli tool and login as admin@test.
-iroha-cli -account_name admin@test
-Select 1 – for new transaction
- 
-Select 14- for creating new coin
- 
-Now type Asset name: mscit
-Domain id: test
-Asset precision: 2
-And select option 3 to add more command
- 
-				Now select option 16 to add asset quantity
-Asset id: mscit#test
-Amount: 16.35
-Select option 4- send request to Iroha peer
- 
- 
-Select option 2 –for query
-Select option 8- for assets
- 
-Select option 1
-Enter peer : 127.0.0.1
-Port: 50051
- 
-
-
-Practical No: 6 
-
-Aim: Write a program to demonstrate mining of Ether. 
-Or 1e 
- 
-import hashlib 
-def mine_block(previous_hash, transactions, difficulty): 
-nonce = 0 
-prefix = '0' * difficulty 
-while True: 
-data = str(nonce) + previous_hash + transactions 
-hash_result=hashlib.sha256(data.encode()).hexdigest()
- if hash_result.startswith(prefix): 
-print("Block mined successfully!") 
-print("Nonce:", nonce) 
-print("Hash:", hash_result) 
-return hash_result 
-nonce += 1 
-def main(): 
-previous_hash = '0000000000000000000000000000000000000000000000000000000000000000'
- # Initial hash 
-transactions = 'A sends 1 Ether to B' # Example transaction data difficulty = 4 # Number of leading zeros required in the hash mined_hash = mine_block(previous_hash, transactions, difficulty) 
-# Add code here to broadcast the mined hash to the Ethereum network if    name == '  main ': 
-main() 
-			Output:
-   
+Aim: Import NLP Libraries for Indian Languages 
+command to be executed on cmd
+	pip install inltk
+	pip install scikit-learn
+Code:
+	from inltk.inltk import setup
+	from inltk.inltk import tokenizesetup(“hi”)  
+	hindi_text = """प्राकृतिक भाषा सीखना बहुत तिलचस्प है।"""
+	# tokenize(input text, language code)
+	print(tokenize(hindi_text, "hi"))
+output:
+Practical No: 6
+Aim: Illustrate part of speech tagging. 
+6a) Part of speech Tagging and chunking of user defined text. 
+Code:   import nltk
+	from nltk import tokenize
+	from nltk import tag
+	from nltk import chunk nltk.download('punkt')
+	nltk.download('averaged_perceptron_tagger')
+	nltk.download('maxent_ne_chunker')
+	nltk.download('words')
+	para = "Hello! My name is Rakesh Mandal. Today you'll be learning NLTK."
+	sents = tokenize.sent_tokenize(para)
+	print("\nsentence tokenization\n==============") print(sents)
+	print("\nword tokenization\n=================")
+	for index in range(len(sents)): words = tokenize.word_tokenize(sents[index])
+	    print(words)
+	tagged_words = []
+	for index in range(len(sents)):
+	    tagged_words.append(tag.pos_tag(tokenize.word_tokenize(sents[index])))
+	print("\nPOS Tagging\n===========")  print(tagged_words)
+	tree = []
+	for index in range(len(sents)): tree.append(chunk.ne_chunk(tagged_words[index]))
+	print("\nChunking\n========")
+	for t in tree: print(t)
+Output:
+6b) Named Entity recognition using user defined text.
+command to run on cmd:
+	1)	pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cpu
+(Reference url: https://discuss.pytorch.org/t/error-loading-lib-site-packages-torch-lib-shm-dll-or-one-of-its-dependencie/201695)
+	2)	python -m spacy download en_core_web_sm
+code:
+	import spacy
+	nlp = spacy.load("en_core_web_sm")
+	text = ("When Sebastian Thrun started working on self-driving cars at "
+	"Google in 2007, few people outside of the company took him "
+	"seriously. “I can tell you very senior CEOs of major American "
+	"car companies would shake my hand and turn away because I wasn’t "
+	"worth talking to,” said Thrun, in an interview with Recode earlier "
+	"this week.")
+	doc = nlp(text)
+	print("Noun phrases:", [chunk.text for chunk in doc.noun_chunks])
+	print("Verbs:", [token.lemma_ for token in doc if token.pos_ == "VERB"])
+Output:
+6c) Named Entity recognition with diagram using NLTK corpus – treebank 
+Code:
+	import nltk
+	nltk.download('treebank')
+	from nltk.corpus import treebank_chunk
+	treebank_chunk.tagged_sents()[0]
+	treebank_chunk.chunked_sents()[0]
+	treebank_chunk.chunked_sents()[0].draw()
+Output
 Practical No: 7
-Aim: Demonstrate the running of the blockchain node. 
-Step 1: Visit: https://bitcoin.org/en/download 
-Step 2: Download windows setup [use and try with Linux version as well] 
- 
-Step 3: Run the setup file-> click next 
- 
-Step 4: Click Next 
- 
-Step 5: Finally click on Install 
-  
- 
- Launch Bitcoin Core-> Click OK. 
-  
-          
-Click on Hide button [Synchronization take place in background] 
-  
-You can create a wallet -> Create a new wallet 
-   
-Enter Wallet name 
-  
-Finally, Account is setup 
-  
- 
-  
-Practical No: 8 
-Aim: Demonstrate the use of Bitcoin Core API. 
-Open Python IDLE and create new Script. 
-######################## 
-from bitcoinlib.wallets import Wallet 
-w = Wallet.create('Wallet6') 
-key1 = w.get_key() 
-print('Wallet Address:',key1.address) 
-w.scan() 
-print(w.info())  
-#################### 
-Open CMD and install bitcoinlib package 
-pip install bitcoinlib 
-
- 
-
-After installing package run the program from Python IDLE 
-
- 
-
-More Detail: https://pypi.org/project/bitcoinlib/ 
- 
-Practical No: 9
-Aim: Create your own blockchain and demonstrate its use. 
-Install on Ubuntu via PPAs 
-The easiest way to install go-ethereum on Ubuntu-based distributions is with the built-in launchpad PPAs (Personal Package Archives). We provide a single PPA repository that contains both our stable & development releases for Ubuntu versions trusty, xenial, zesty & artful. 
- linux: To enable our launchpad repository run: 
-    Step 1: open new terminal 
- 	    Step 2: on terminal type this command 
-sudo add-apt-repository -y ppa:ethereum/ethereum 
-#if above command gives error then run 
-sudo apt-get install --reinstall ca-certificates 
-   Step 3: install the stable version of go-ethereum: 
-sudo apt-get update 
-sudo apt-get install ethereum 
-    Step 4: create new directory for storing blockchain data 
-mkdir myblockchain 
-cd myblockchain 
-geth account new --datadir data 
- Step 5:Create genesis.json file 
-sudo nano genesis.json 
-{ 
-"config": { 
-"chainId": 12345,
-"homesteadBlock": 0,
-"eip150Block": 0,
-"eip155Block": 0,
-"eip158Block": 0,
-"byzantiumBlock": 0,
-"constantinopleBlock": 0,
-"petersburgBlock": 0,
-"istanbulBlock": 0,
-"berlinBlock": 0,
-"ethash": {}
-},
-"difficulty": "1",
-"gasLimit": "8000000",
-"alloc": {
-"7df9a875a174b3bc565e6424a0050ebc1b2d1d82": { "balance": "300000" },
-"Efaf4df069211972a7D2C3306d1F778a1603F10F": { "balance": "400000" }}}
-save the file -> ctrl +o to write -> {enter} save -> ctrl +x exit
-Step 6: initialize the block
-geth init --datadir data genesis.json
-Step 7: create network
-geth --datadir data --networkid 12345 [do not close this terminal] 
-
-  
-Step 8: open new tab/terminal 2: 
-sudo geth attach data/geth.ipc
-eth.getBalance(eth.accounts[0])
-miner.setEtherbase(eth.accounts[0])
-miner.start()
-admin.addPeer(admin.nodeInfo.enode)
-eth.getBalance(eth.accounts[0])
- 
-Step 10: Wait for 10-20 minutes and check balance 
-eth.getBalance(eth.accounts[0]) 
-if ether balance is 0 wait for 10-20minutes for mining process to get complete and run 
-eth.getBalance(eth.accounts[0]) again. 
- 
- 
-After balance is updated, you can check current block height 
-eth.blockNumber 
- More detail: https://geth.ethereum.org/docs/fundamentals/private-network 
- 
-Practical No: 10
-Aim: Build Dapps with angular[using truffle and ganache cli]
-Step 1:Install the required package –on new terminal 1 type these commands
-sudo apt-get -y install curl git vim build-essential
-sudo apt-get install curl software-properties-common
-sudo apt install npm
-sudo npm install -g web3
-sudo apt-get install nodejs
-sudo apt install python3.9
-curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
-sudo npm install --global node-sass@latest
-sudo npm install -g truffle@latest
-sudo npm install -g ganache-cli
-export NODE_OPTIONS=--openssl-legacy-provider
-########################
-////to update npm//
-sudo npm cache clean -f
-sudo npm install -g n
-sudo n latest
-###################### 
-Start from here 
-Step 2: Create a new directory
-mkdir myproject2
-cd myproject2
-Step 3: Initialize the project folder
- truffle init
-Step 4: Now create a new contract
- nano contracts/HelloWorld.sol
-Step 5: Add the following code in HelloWorld.sol
-pragma solidity ^0.5.0;
-contract HelloWorld {
-function sayHello() public pure returns(string memory){
-return("hello world");}}
-Step 6: create default configuration file
-nano migrations/1_initial_migration.js
-Step 7: Edit this line in the file
-const Migrations = artifacts.require("HelloWorld");
-module.exports = function (deployer) {
-deployer.deploy(Migrations,"hello");
-};
-Step 8: Edit network configuration file 
-  sudo nano truffle-config.js 
- 		Remove all line(press CTRL +K) from the file and add the following lines 
-    #########################
-    module.exports = {
-    networks: {
-    development: {
-    host: "127.0.0.1",
-    port: 8545,
-    network_id: "*",
-    }
-    }}
-    #########################
-Step 9: start ganache-cli –Switch/Open to terminal 2
-      ganache-cli
-Step 10: deploy the truffle deploy- On terminal 1
-      truffle deploy
-      [Note contract address] 
-                      Step 11: Open truffle console - On terminal 1 
-                                     truffle console 
-Get reference of contact 
- 			contract = await HelloWorld.at('0x2C403EE1b30F56C0c773089c1Eb9DddF1499C969') 
-[Replace '0x2C403EE1b30F56C0c773089c1Eb9DddF1499C969' with your contact address; every time you compile/deploy a new contract address will be generated] 
-   		Step 12: Call the function from the contract  
-a = await contract.sayHello() 
-Step 13: Print output on the screen 
-a 
-  
-[In case you are getting any error for version; change the solidity version in HelloWorld.sol] 
-Example 2: 
- 
-Save-> Deploy ->Open console 
+Aim: Finite state automata 
+7a) Define grammar using nltk. Analyze a sentence using the same 
+Code:  import nltk
+	from nltk import tokenize
+	grammar1 = nltk.CFG.fromstring("""
+	S -> VP
+	VP -> VP NP
+	NP -> Det NP
+	Det -> 'that'
+	NP -> singular Noun
+	NP -> 'flight'
+	VP -> 'Book' """)
+	sentence = "Book that flight"
+	for index in range(len(sentence)):
+	all_tokens = tokenize.word_tokenize(sentence)
+	print(all_tokens)
+	parser = nltk.ChartParser(grammar1)
+	for tree in parser.parse(all_tokens):
+	print(tree)
+	tree.draw()
+Output:
+7b) Accept the input string with Regular expression of Finite Automaton: 101+ 
+Code:  def FA(s):
+    if len(s)<3:
+        return "Rejected"
+    if s[0]=='1':
+        if s[1]=='0':
+            if s[2]=='1':
+                for i in range(3,len(s)):
+                    if s[i]!='1':
+                        return "Rejected"
+                    return "Accepted"
+                return "Rejected"
+            return "Rejected"
+        return "Rejected"
+inputs=['1','10101','101','10111','101101',""]
+for i in inputs:
+    print(FA(i))
+Output:
+7c) Accept the input string with Regular expression of FA: (a+b)*bba 
+Code:  def FA(s):
+    size=0
+    for i in s:
+        if i=='a' or i=='b':
+            size+=1
+        else:
+            return "Rejected"
+    if size>=3:
+        if s[size-3]=='b':
+            if s[size-2]=='b':
+                if s[size-1]=='a':
+                    return "Accepted"
+                return "Rejected"
+            return "Rejected"
+        return "Rejected"
+    return "Rejected"
+inputs=['bba', 'ababbba', 'abba','abb', 'baba','bbb','']
+for i in inputs:
+    print(FA(i))
+Output: 
+d) Implementation of Deductive Chart Parsing using context free grammar and a given sentence Code:   import nltk
+code:	from nltk import tokenize
+	grammar1 = nltk.CFG.fromstring("""
+	S -> NP VP
+	PP -> P NP
+	NP -> Det N | Det N PP | 'I'
+	VP -> V NP | VP PP
+	Det -> 'a' | 'my'
+	N -> 'bird' | 'balcony'
+	V -> 'saw'
+	P -> 'in'
+	""")
+	sentence = "I saw a bird in my balcony"
+	for index in range(len(sentence)):
+	    all_tokens = tokenize.word_tokenize(sentence)
+	print(all_tokens)
+	# all_tokens = ['I', 'saw', 'a', 'bird', 'in', 'my', 'balcony']
+	parser = nltk.ChartParser(grammar1)
+	for tree in parser.parse(all_tokens):
+	    print(tree)
+	    tree.draw()
+Output
+Practical No: 8
+Aim: Study PorterStemmer, LancasterStemmer, RegexpStemmer, SnowballStemmer and Study WordNetLemmatizer 
+8a) PorterStemmer 
+The Porter stemming algorithm is a widely used algorithm for stemming English words, which reduces each word to its base or root form. It was developed by Martin Porter in 1979 and has since become a popular algorithm for text processing tasks like information retrieval, information extraction, and text classification.
+Code:  import nltk
+	from nltk.stem import PorterStemmer
+	word_stemmer = PorterStemmer()
+	print(word_stemmer.stem('writing'))
+Output:
+8b) LancasterStemmer 
+The Lancaster stemming algorithm is another widely used algorithm for stemming English words, which is similar to the Porter stemming algorithm but often produces more aggressive stemming. It was developed by Chris Paice in 1990 and is known for its speed and simplicity. 
+Code:   import nltk
+	from nltk.stem import LancasterStemmer
+	Lanc_stemmer = LancasterStemmer()
+	print(Lanc_stemmer.stem('writing'))
+Output:
+c) RegexpStemmer 
+The RegexpStemmer is a stemmer in nltk library that allows to specify a regular expression pattern to match against words and remove matching suffixes to obtain the stem of the word. This allows for more customizable stemming than the Porter or Lancaster stemmers. 
+Code:    import nltk
+	from nltk.stem import RegexpStemmer
+	Reg_stemmer = RegexpStemmer('ing$|s$|e$|able$', min=4)
+	print(Reg_stemmer.stem('writing'))
+Output: 
+d) SnowballStemmer 
+The Snowball stemming algorithm, also known as the Porter2 stemming algorithm, is an improvement over the original Porter stemming algorithm that has been extended to support multiple languages. It was developed by Martin Porter and is available in the nltk library as the SnowballStemmer. 
+Code:    import nltk
+	from nltk.stem import SnowballStemmer
+	english_stemmer = SnowballStemmer('english')
+	print(english_stemmer.stem ('writing'))
+Output:
+8e) WordNetLemmatizer 
+The WordNetLemmatizer is a lemmatizer in the nltk library that uses WordNet to find the base or dictionary form of a word. Unlike a stemmer, a lemmatizer attempts to return a valid word that can be found in a dictionary.
+Code: import nltk
+	from nltk.stem import WordNetLemmatizer
+	lemmatizer = WordNetLemmatizer()
+	print("word :\tlemma")
+	print("rocks :", lemmatizer.lemmatize("rocks"))
+	print("corpora :", lemmatizer.lemmatize("corpora"))
+	print("better :", lemmatizer.lemmatize("better", pos ="a"))
+Output:
